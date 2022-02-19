@@ -33,10 +33,9 @@ class QuizInterface:
         self.false_button.grid(row=2, column=1)
         self.get_next_question()
 
-
-
-
         self.window.mainloop()
+
+
     def get_next_question(self):
         q_qtext = self.quiz.next_question()
         self.canvas.config(bg='white')
