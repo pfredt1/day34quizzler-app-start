@@ -1,10 +1,13 @@
 import html
 
+
 class QuizBrain:
 
     def __init__(self, q_list):
+        self.correct_answer = None
         self.question_number = 0
         self.score = 0
+        self.game_over = False
         self.question_list = q_list
         self.current_question = None
 
@@ -12,18 +15,20 @@ class QuizBrain:
         return self.question_number < len(self.question_list)
 
     def next_question(self):
-        self.current_question = self.question_list[self.question_number]
-        self.question_number += 1
-        question = html.unescape(self.current_question.text)
-        #user_answer = input(f"Q.{self.question_number}: {question} (True/False): ")
-        return (f"Q.{self.question_number}: {question} ?")
-
-        #self.check_answer(user_answer)
+        if self.still_has_questions():
+            self.current_question = self.question_list[self.question_number]
+            self.question_number += 1
+            question = html.unescape(self.current_question.text)
+            return (f"Q.{self.question_number}: {question} ?")
+        else:
+            self.game_over = True
+            return "Game Over"
 
     def check_answer(self, user_answer):
         correct_answer = self.current_question.answer
         if user_answer.lower() == correct_answer.lower():
-            self.score += 1
+            if False == self.game_over:
+                self.score += 1
             return True
         else:
             return False

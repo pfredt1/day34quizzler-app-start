@@ -31,6 +31,7 @@ class QuizInterface:
         false_image = PhotoImage(file='images/false.png')
         self.false_button = Button(image=false_image, highlightthickness=0, command=self.false_pressed)
         self.false_button.grid(row=2, column=1)
+
         self.get_next_question()
 
         self.window.mainloop()
@@ -38,8 +39,11 @@ class QuizInterface:
 
     def get_next_question(self):
         q_qtext = self.quiz.next_question()
-        self.canvas.config(bg='white')
-        self.canvas.itemconfig(self.question_text, text=q_qtext)
+        if self.quiz.game_over == True:
+            self.game_over()
+        else:
+            self.canvas.config(bg='white')
+            self.canvas.itemconfig(self.question_text, text=q_qtext)
 
     def true_pressed(self):
         self.give_feedback(self.quiz.check_answer("True"))
@@ -50,10 +54,17 @@ class QuizInterface:
     def give_feedback(self, is_right):
         if is_right:
             self.canvas.config(bg='green')
+            self.score_label.config(text=f"Score = {self.quiz.score}/{self.quiz.question_number}")
+
         else:
+
             self.canvas.config(bg='red')
-        self.score_label.config(text=f"Score = {self.quiz.score}/{self.quiz.question_number}")
+            self.score_label.config(text=f"Score = {self.quiz.score}/{self.quiz.question_number}")
         self.window.after(1000, self.get_next_question)
+
+    def game_over(self):
+        self.canvas.config(bg='yellow')
+        self.canvas.itemconfig(self.question_text, text='G A M E  0 V E R !')
 
 
 
